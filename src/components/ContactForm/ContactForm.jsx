@@ -1,47 +1,45 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import { ContactFormWrapper, ButtonForm } from './ContactForm.styled';
 
-export class ContactForm extends Component {
-  state = {
+export const ContactForm = ({ addContact }) => {
+  const [contactInfo, setContactInfo] = useState({
     name: '',
     number: '',
+  });
+
+  const handleChange = evt => {
+    setContactInfo({ ...contactInfo, [evt.target.name]: evt.target.value });
   };
 
-  handleChange = evt => {
-    const { name, value } = evt.target;
-    this.setState({ [name]: value });
-  };
-
-  handleSubmit = evt => {
+  const handleSubmit = evt => {
     evt.preventDefault();
-    this.props.addContact(this.state);
-    this.setState({ name: '', number: '' });
+    addContact(contactInfo);
+    setContactInfo({ name: '', number: '' });
   };
-  render() {
-    return (
-      <ContactFormWrapper onSubmit={this.handleSubmit}>
-        <label>
-          Name
-          <input
-            type="text"
-            name="name"
-            value={this.state.name}
-            onChange={this.handleChange}
-            required
-          />
-        </label>
-        <label>
-          Number
-          <input
-            type="text"
-            name="number"
-            value={this.state.number}
-            onChange={this.handleChange}
-            required
-          />
-        </label>
-        <ButtonForm type="submit">Add contact</ButtonForm>
-      </ContactFormWrapper>
-    );
-  }
-}
+
+  return (
+    <ContactFormWrapper onSubmit={handleSubmit}>
+      <label>
+        Name
+        <input
+          type="text"
+          name="name"
+          value={contactInfo.name}
+          onChange={handleChange}
+          required
+        />
+      </label>
+      <label>
+        Number
+        <input
+          type="text"
+          name="number"
+          value={contactInfo.number}
+          onChange={handleChange}
+          required
+        />
+      </label>
+      <ButtonForm type="submit">Add contact</ButtonForm>
+    </ContactFormWrapper>
+  );
+};
