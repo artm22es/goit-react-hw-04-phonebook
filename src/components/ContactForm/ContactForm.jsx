@@ -2,19 +2,29 @@ import { useState } from 'react';
 import { ContactFormWrapper, ButtonForm } from './ContactForm.styled';
 
 export const ContactForm = ({ addContact }) => {
-  const [contactInfo, setContactInfo] = useState({
-    name: '',
-    number: '',
-  });
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
 
   const handleChange = evt => {
-    setContactInfo({ ...contactInfo, [evt.target.name]: evt.target.value });
+    const { name, value } = evt.target;
+
+    switch (name) {
+      case 'name':
+        setName(value);
+        break;
+      case 'number':
+        setNumber(value);
+        break;
+      default:
+        return;
+    }
   };
 
   const handleSubmit = evt => {
     evt.preventDefault();
-    addContact(contactInfo);
-    setContactInfo({ name: '', number: '' });
+    addContact({ name, number });
+    setName('');
+    setNumber('');
   };
 
   return (
@@ -24,7 +34,7 @@ export const ContactForm = ({ addContact }) => {
         <input
           type="text"
           name="name"
-          value={contactInfo.name}
+          value={name}
           onChange={handleChange}
           required
         />
@@ -34,7 +44,7 @@ export const ContactForm = ({ addContact }) => {
         <input
           type="text"
           name="number"
-          value={contactInfo.number}
+          value={number}
           onChange={handleChange}
           required
         />
